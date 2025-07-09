@@ -9,6 +9,73 @@ A comprehensive health tracking application that visualizes and analyzes persona
 ![HealthTracker Screenshot](assets/Screenshot5.png)
 ![HealthTracker Screenshot](assets/Screenshot6.png)
 
+## Site Map
+
+![Site Map](assets/Site%20Map.jpeg)
+
+### Application Structure
+
+The HealthTrack Pro application follows a single-page application (SPA) architecture with these main components:
+
+1. **Main Dashboard**
+   - Welcome banner with user information
+   - Health status overview
+   - Data visualization charts
+   - Quick action buttons
+
+2. **Data Processing**
+   - CSV file upload functionality
+   - Data parsing and categorization
+   - Results display with interactive components
+
+3. **AI Analysis**
+   - Integration with Databricks AI
+   - Health data analysis and insights
+   - Key findings extraction
+   - Markdown rendering of results
+
+4. **File Structure**
+   ```
+   HealthTracker/
+   ├── index.html            # Main entry point
+   ├── css/
+   │   └── styles.css        # Custom styling
+   ├── js/
+   │   ├── app.js           # Core application logic
+   │   ├── databricks-ai.js # AI integration
+   │   └── env-loader.js    # Environment variables
+   └── data/
+       ├── HealthReport.csv        # Sample health data
+       ├── medical_report.csv      # Sample medical data
+       └── shoaib_health_report.csv # Personal health data
+   ```
+
+### Data Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant UI as User Interface
+    participant App as Application Logic
+    participant CSV as CSV Processor
+    participant AI as Databricks AI
+    
+    User->>UI: Upload CSV file
+    UI->>CSV: Process file
+    CSV->>App: Return structured data
+    App->>UI: Update metrics display
+    
+    User->>UI: Request AI analysis
+    UI->>App: Forward request
+    App->>AI: Send health data
+    AI->>App: Return insights
+    App->>UI: Display summary & findings
+    
+    User->>UI: Export report
+    UI->>App: Generate report
+    App->>User: Download report file
+```
+
 ## Features
 
 - **Health Data Upload**: Upload your health reports in CSV format
