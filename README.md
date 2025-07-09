@@ -2,7 +2,12 @@
 
 A comprehensive health tracking application that visualizes and analyzes personal health data from various sources, including medical reports and CSV files.
 
-![HealthTracker Screenshot](assets/screenshot.png)
+![HealthTracker Screenshot](assets/Screenshot1.png)
+![HealthTracker Screenshot](assets/Screenshot2.png)
+![HealthTracker Screenshot](assets/Screenshot3.png)
+![HealthTracker Screenshot](assets/Screenshot4.png)
+![HealthTracker Screenshot](assets/Screenshot5.png)
+![HealthTracker Screenshot](assets/Screenshot6.png)
 
 ## Features
 
