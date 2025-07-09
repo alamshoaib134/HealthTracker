@@ -1,0 +1,192 @@
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+}
+/* Databricks AI badge styling */
+.ai-badge {
+    background: linear-gradient(90deg, #ff5f5f, #ff9a5f);
+    color: white;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    box-shadow: 0 2px 4px rgba(255, 95, 95, 0.3);
+}
+
+/* Small AI badge for inline use */
+.ai-badge-small {
+    background: linear-gradient(90deg, #ff5f5f, #ff9a5f);
+    color: white;
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    box-shadow: 0 1px 2px rgba(255, 95, 95, 0.2);
+    display: inline-block;
+}
+
+/* Note: Health Metrics Overview section was removed as requested */
+
+.health-card {
+    transition: all 0.3s ease;
+}
+.health-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Health card loading state */
+.health-card.loading {
+    position: relative;
+}
+.health-card.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 0.75rem;
+    z-index: 1;
+}
+.health-card.loading::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    margin: -15px 0 0 -15px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    z-index: 2;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+#csvUpload::-webkit-file-upload-button {
+    visibility: hidden;
+}
+#csvUpload::before {
+    content: 'Upload CSV';
+    display: inline-block;
+    background: linear-gradient(top, #f9f9f9, #e3e3e3);
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: 10pt;
+}
+
+/* Social media icon styling */
+.social-icon {
+    transition: transform 0.3s ease, color 0.3s ease;
+    font-size: 1.2rem;
+}
+.social-icon:hover {
+    transform: translateY(-3px);
+}
+.fa-facebook-f:hover {
+    color: #4267B2;
+}
+.fa-twitter:hover {
+    color: #1DA1F2;
+}
+.fa-instagram:hover {
+    color: #E1306C;
+}
+.fa-linkedin-in:hover {
+    color: #0077B5;
+}
+
+/* Collapsible section styles */
+.collapsible-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0.75rem 1rem;
+    margin: -1rem -1rem 1rem -1rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+    position: relative;
+}
+
+.collapsible-header:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.collapsible-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 1rem;
+    right: 1rem;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: opacity 0.2s ease;
+}
+
+.collapsed .collapsible-header {
+    margin-bottom: 0;
+    border-radius: 0.5rem;
+}
+
+.collapsed .collapsible-header::after {
+    opacity: 0;
+}
+
+.collapsible-icon {
+    transition: transform 0.3s ease;
+}
+
+.collapsed .collapsible-icon {
+    transform: rotate(-90deg);
+}
+
+.metrics-content {
+    transition: all 0.4s ease-out;
+    overflow: hidden;
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 2000px; /* Large enough to accommodate all content */
+}
+
+.collapsed .metrics-content {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    margin-top: 0;
+    padding-top: 0;
+    overflow: hidden;
+}

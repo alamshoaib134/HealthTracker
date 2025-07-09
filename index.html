@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthTrack Pro - Comprehensive Health Tracker</title>
+    <!-- External CSS Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- External JS Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- Environment Configuration (load this before any app scripts) -->
+    <script src="js/env-loader.js"></script>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-blue-600 text-white shadow-lg">
+            <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-heartbeat text-2xl"></i>
+                    <h1 class="text-2xl font-bold">HealthTrack Pro</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <label for="csvUpload" class="flex items-center space-x-2 bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-full transition cursor-pointer">
+                        <i class="fas fa-file-upload"></i>
+                        <span>Upload CSV</span>
+                        <input type="file" id="csvUpload" accept=".csv" class="hidden">
+                    </label>
+                    <button id="profileBtn" class="flex items-center space-x-2 bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-full transition">
+                        <i class="fas fa-user-circle"></i>
+                        <span>My Profile</span>
+                    </button>
+                    <button id="themeToggle" class="p-2 rounded-full bg-blue-700 hover:bg-blue-800">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-grow container mx-auto px-4 py-8">
+            <!-- Welcome Banner -->
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl p-6 mb-8 shadow-lg">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold mb-2">Welcome back, <span id="userName">User</span>!</h2>
+                        <p class="opacity-90">Track your health metrics and visualize your progress over time.</p>
+                        <div class="mt-3 flex space-x-3">
+                            <a href="https://www.facebook.com/shoab.alam.98" target="_blank" class="text-white hover:text-blue-200" title="Facebook">
+                                <i class="fab fa-facebook-f social-icon"></i>
+                            </a>
+                            <a href="https://x.com/alamshoaib134" target="_blank" class="text-white hover:text-blue-200" title="Twitter/X">
+                                <i class="fab fa-twitter social-icon"></i>
+                            </a>
+                            <a href="https://www.instagram.com/shoaibxalam/" target="_blank" class="text-white hover:text-blue-200" title="Instagram">
+                                <i class="fab fa-instagram social-icon"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/alamshoaib134/" target="_blank" class="text-white hover:text-blue-200" title="LinkedIn">
+                                <i class="fab fa-linkedin-in social-icon"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <button id="addRecordBtn" class="mt-4 md:mt-0 bg-white text-blue-600 hover:bg-gray-100 font-semibold px-6 py-3 rounded-full flex items-center space-x-2 transition">
+                        <i class="fas fa-plus"></i>
+                        <span>Add New Health Record</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Health Summary Card -->
+                <div class="bg-white rounded-xl shadow-md p-6 health-card">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center">
+                            <h3 class="text-lg font-semibold text-gray-800">Health Summary</h3>
+                            <span class="ml-2 ai-badge-small hidden bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded">AI</span>
+                        </div>
+                        <span class="health-card-status bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">No Data</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium text-gray-600">Overall Health</span>
+                                <span class="text-sm font-medium text-blue-600 health-score-value">--</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="health-score-bar bg-gray-400 h-2.5 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-700 mb-2">Key Insights</h4>
+                            <ul class="list-disc pl-5 health-insights">
+                                <li class="text-sm text-gray-600">Upload your data to get insights</li>
+                                <li class="text-sm text-gray-600">AI-powered health analysis</li>
+                            </ul>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="text-center p-3 bg-blue-50 rounded-lg">
+                                <p class="text-sm text-gray-600">Last Checkup</p>
+                                <p class="font-bold text-blue-600 last-checkup">--</p>
+                            </div>
+                            <div class="text-center p-3 bg-green-50 rounded-lg">
+                                <p class="text-sm text-gray-600">Next Due</p>
+                                <p class="font-bold text-green-600 next-checkup">--</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Critical Alerts Card -->
+                <div class="bg-white rounded-xl shadow-md p-6 health-card">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Health Alerts</h3>
+                        <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">2 New</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-start space-x-3 p-3 bg-red-50 rounded-lg">
+                            <div class="text-red-500 mt-1">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-800">High Blood Pressure</p>
+                                <p class="text-sm text-gray-600">Last reading: 145/95 mmHg</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg">
+                            <div class="text-yellow-500 mt-1">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-800">Low Vitamin D</p>
+                                <p class="text-sm text-gray-600">Level: 18 ng/mL</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions Card -->
+                <div class="bg-white rounded-xl shadow-md p-6 health-card">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button id="newReportBtn" class="flex flex-col items-center justify-center p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition">
+                            <i class="fas fa-file-medical text-blue-500 text-xl mb-2"></i>
+                            <span class="text-sm font-medium">New Report</span>
+                        </button>
+                        <button id="medicationsBtn" class="flex flex-col items-center justify-center p-3 bg-green-50 hover:bg-green-100 rounded-lg transition">
+                            <i class="fas fa-pills text-green-500 text-xl mb-2"></i>
+                            <span class="text-sm font-medium">Medications</span>
+                        </button>
+                        <button id="nutritionBtn" class="flex flex-col items-center justify-center p-3 bg-purple-50 hover:bg-purple-100 rounded-lg transition">
+                            <i class="fas fa-utensils text-purple-500 text-xl mb-2"></i>
+                            <span class="text-sm font-medium">Nutrition</span>
+                        </button>
+                        <button id="activityBtn" class="flex flex-col items-center justify-center p-3 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition">
+                            <i class="fas fa-running text-yellow-500 text-xl mb-2"></i>
+                            <span class="text-sm font-medium">Activity</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CSV Results Section (Initially Hidden) -->
+            <div id="csvResults" class="bg-white rounded-xl shadow-md p-6 mb-8 hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">Health Metrics Analysis</h2>
+                    <div class="flex space-x-2">
+                        <button id="generateSummaryBtn" class="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition">
+                            <i id="summaryIcon" class="fas fa-robot"></i>
+                            <span id="summaryText">Generate AI Summary</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- AI Summary Section (Initially Hidden) -->
+                <div id="aiSummary" class="bg-gray-50 rounded-lg p-6 mb-6 hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center">
+                            <h3 class="text-lg font-semibold text-gray-800">AI Health Analysis</h3>
+                            <span id="aiBadge" class="ai-badge ml-2 hidden">Databricks AI</span>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button id="refreshSummaryBtn" class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                            <button id="exportSummaryBtn" class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Loading Animation -->
+                    <div id="loadingIndicator" class="flex flex-col items-center py-8">
+                        <div class="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                        <p class="mt-4 text-gray-600">Generating your health analysis...</p>
+                        <p id="aiSourceInfo" class="mt-2 text-sm text-blue-600">Powered by Databricks AI</p>
+                    </div>
+                    
+                    <!-- Summary Content -->
+                    <div id="summaryContent" class="hidden">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div class="bg-white p-4 rounded-lg shadow-sm relative">
+                                <h4 class="font-medium text-gray-800 mb-2 pb-2 border-b">Key Findings</h4>
+                                <div id="keyFindings" class="prose text-sm"></div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-sm relative">
+                                <h4 class="font-medium text-gray-800 mb-2 pb-2 border-b">Recommendations</h4>
+                                <div id="recommendations" class="prose text-sm"></div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-sm relative">
+                                <h4 class="font-medium text-gray-800 mb-2 pb-2 border-b">Detailed Analysis</h4>
+                                <div id="detailedAnalysis" class="prose text-sm max-h-60 overflow-y-auto custom-scrollbar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-800">Health Metrics Analysis</h2>
+                    <div class="space-x-2">
+                        <button id="expandAllBtn" class="text-xs px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition">
+                            <i class="fas fa-chevron-down mr-1"></i> Expand All
+                        </button>
+                        <button id="collapseAllBtn" class="text-xs px-3 py-1 bg-gray-500 hover:bg-gray-600 text-white rounded-md transition">
+                            <i class="fas fa-chevron-up mr-1"></i> Collapse All
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="metricsContainer" class="space-y-6">
+                    <!-- Metrics will be dynamically added here -->
+                </div>
+            </div>
+
+            <!-- Health Dashboard Charts -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Blood Pressure Chart -->
+                <div class="bg-white rounded-xl shadow-md p-6 health-card">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Blood Pressure</h3>
+                    <div class="h-64">
+                        <canvas id="bpChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Heart Rate Chart -->
+                <div class="bg-white rounded-xl shadow-md p-6 health-card">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Heart Rate</h3>
+                    <div class="h-64">
+                        <canvas id="hrChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Cholesterol Chart -->
+                <div class="bg-white rounded-xl shadow-md p-6 health-card">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Cholesterol</h3>
+                    <div class="h-64">
+                        <canvas id="cholChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-8">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">About HealthTrack Pro</h4>
+                        <p class="text-gray-300">A comprehensive health monitoring tool to help you track, analyze, and improve your well-being.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-300 hover:text-blue-400">Dashboard</a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-blue-400">My Health Records</a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-blue-400">Settings</a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-blue-400">Help & Support</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Connect With Shoaib</h4>
+                        <div class="flex space-x-4">
+                            <a href="https://www.facebook.com/shoab.alam.98" target="_blank" class="text-gray-300 hover:text-blue-400" title="Facebook"><i class="fab fa-facebook-f social-icon"></i></a>
+                            <a href="https://x.com/alamshoaib134" target="_blank" class="text-gray-300 hover:text-blue-400" title="Twitter/X"><i class="fab fa-twitter social-icon"></i></a>
+                            <a href="https://www.instagram.com/shoaibxalam/" target="_blank" class="text-gray-300 hover:text-blue-400" title="Instagram"><i class="fab fa-instagram social-icon"></i></a>
+                            <a href="https://www.linkedin.com/in/alamshoaib134/" target="_blank" class="text-gray-300 hover:text-blue-400" title="LinkedIn"><i class="fab fa-linkedin-in social-icon"></i></a>
+                        </div>
+                        <p class="text-gray-300 mt-3 text-sm">Follow Shoaib on social media for health updates and tips</p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Subscribe to Updates</h4>
+                        <form class="flex">
+                            <input type="email" placeholder="Your email" class="py-2 px-3 rounded-l-lg flex-1 text-gray-800">
+                            <button class="bg-blue-600 hover:bg-blue-700 py-2 px-4 rounded-r-lg transition">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                    <p>© 2025 HealthTrack Pro by Shoaib Alam. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Profile Modal (Hidden by Default) -->
+    <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl p-8 max-w-2xl w-full max-h-90vh overflow-y-auto custom-scrollbar">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">My Health Profile</h2>
+                <button id="closeProfileBtn" class="text-gray-500 hover:text-gray-700 text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form class="space-y-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Personal Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                            <input type="text" id="fullName" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                        </div>
+                        <div>
+                            <label for="dob" class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+                            <input type="date" id="dob" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                        </div>
+                        <div>
+                            <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+                            <select id="gender" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                                <option value="">Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="bloodType" class="block text-sm font-medium text-gray-700 mb-1">Blood Type</label>
+                            <select id="bloodType" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                                <option value="">Select</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Body Measurements</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="height" class="block text-sm font-medium text-gray-700 mb-1">Height (cm)</label>
+                            <input type="number" id="height" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                        </div>
+                        <div>
+                            <label for="weight" class="block text-sm font-medium text-gray-700 mb-1">Weight (kg)</label>
+                            <input type="number" id="weight" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Medical Information</h3>
+                    <div>
+                        <label for="allergies" class="block text-sm font-medium text-gray-700 mb-1">Allergies</label>
+                        <textarea id="allergies" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md"></textarea>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Emergency Contact</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="emergencyName" class="block text-sm font-medium text-gray-700 mb-1">Contact Name</label>
+                            <input type="text" id="emergencyName" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                        </div>
+                        <div>
+                            <label for="emergencyPhone" class="block text-sm font-medium text-gray-700 mb-1">Contact Phone</label>
+                            <input type="tel" id="emergencyPhone" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-3">
+                    <button type="button" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Cancel</button>
+                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Save Profile</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Add Health Record Modal (Hidden by Default) -->
+    <div id="addRecordModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl p-8 max-w-2xl w-full">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Add Health Record</h2>
+                <button id="closeAddRecordBtn" class="text-gray-500 hover:text-gray-700 text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="recordDate" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                        <input type="date" id="recordDate" class="w-full px-3 py-2 border border-gray-300 rounded-md" value="2023-06-15">
+                    </div>
+                    <div>
+                        <label for="recordCategory" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                        <select id="recordCategory" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                            <option value="">Select Category</option>
+                            <option value="Blood Profile">Blood Profile</option>
+                            <option value="Kidney Profile">Kidney Profile</option>
+                            <option value="Liver Profile">Liver Profile</option>
+                            <option value="Lipid Profile">Lipid Profile</option>
+                            <option value="Diabetes Profile">Diabetes Profile</option>
+                            <option value="Thyroid Profile">Thyroid Profile</option>
+                            <option value="Cardiac Profile">Cardiac Profile</option>
+                            <option value="Vitamin Profile">Vitamin Profile</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="recordTest" class="block text-sm font-medium text-gray-700 mb-1">Test Name</label>
+                    <input type="text" id="recordTest" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="e.g. Hemoglobin, Blood Sugar, etc.">
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="recordResult" class="block text-sm font-medium text-gray-700 mb-1">Result</label>
+                        <input type="text" id="recordResult" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <label for="recordUnit" class="block text-sm font-medium text-gray-700 mb-1">Unit</label>
+                        <input type="text" id="recordUnit" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="e.g. mg/dL, g/dL">
+                    </div>
+                    <div>
+                        <label for="recordFlag" class="block text-sm font-medium text-gray-700 mb-1">Flag</label>
+                        <select id="recordFlag" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                            <option value="normal">Normal</option>
+                            <option value="low">Low</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="recordMin" class="block text-sm font-medium text-gray-700 mb-1">Min Reference Value</label>
+                        <input type="text" id="recordMin" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <label for="recordMax" class="block text-sm font-medium text-gray-700 mb-1">Max Reference Value</label>
+                        <input type="text" id="recordMax" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="recordNotes" class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                    <textarea id="recordNotes" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md"></textarea>
+                </div>
+                
+                <div class="flex justify-end space-x-3">
+                    <button type="button" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Cancel</button>
+                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Save Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- AI Suggestion Modal (Hidden by Default) -->
+    <div id="aiSuggestionModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl p-8 max-w-2xl w-full">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center">
+                    <h2 id="suggestionTitle" class="text-2xl font-bold text-gray-800">Health Suggestions</h2>
+                    <span class="ml-3 ai-badge-small bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded">AI</span>
+                </div>
+                <button id="closeSuggestionBtn" class="text-gray-500 hover:text-gray-700 text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Loading State -->
+            <div id="suggestionLoading" class="py-12 flex flex-col items-center">
+                <div class="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                <p class="mt-4 text-gray-600">Generating personalized suggestions...</p>
+            </div>
+            
+            <!-- Content State -->
+            <div id="suggestionContent" class="space-y-6 hidden">
+                <div id="suggestionDescription" class="text-gray-600">
+                    <!-- Will be populated by JS -->
+                </div>
+                
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Suggestions</h3>
+                    <ul id="suggestionsList" class="list-disc pl-5 space-y-3">
+                        <!-- Will be populated by JS -->
+                    </ul>
+                </div>
+                
+                <div class="text-xs text-gray-500 pt-4 border-t">
+                    <p>* AI-generated suggestions for informational purposes only. Always consult with healthcare professionals before making changes to your health regimen, especially regarding medications.</p>
+                </div>
+                
+                <div class="flex justify-end">
+                    <button id="saveSuggestionBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                        Save to My Plan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Scripts -->
+    <script src="js/databricks-ai.js"></script>
+    <script src="js/app.js"></script>
+    
+    <!-- AI Credentials Notice -->
+    <script>
+        console.log("Using Databricks AI integration with endpoint: https://nike-sole-react.cloud.databricks.com/serving-endpoints");
+    </script>
+</body>
+</html>
